@@ -1,15 +1,15 @@
 /**
- * desc: 公共方法，日志打印，socket 基础函数...
- * file: util.h
+ * desc: 公共方法，socket 基础函数...
+ * file: utils.c
  *
- * author: myw31415926
+ * author:  myw31415926
+ * date:    20180930
+ * version: V0.1
+ *
  * the closer you look, the less you see
  */
 
 #include "utils.h"
-
-#include <errno.h>
-#include <unistd.h>
 
 /* 从socket中读取n个字节，返回实际读取的字节数 */
 ssize_t read_n(int fd, void *buf, size_t nbytes)

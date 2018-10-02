@@ -1,7 +1,7 @@
 # network program makefile
 
 DIRS = \
-	tcp
+	tcp_echo
 
 all:
 	for i in $(DIRS); do \
