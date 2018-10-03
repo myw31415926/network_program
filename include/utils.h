@@ -25,6 +25,7 @@
 #include <sys/time.h>    /* timeval for select() */
 #include <netinet/in.h>  /* sockaddr_in{} and other Internet defns */
 #include <arpa/inet.h>   /* inet(3) functions */
+#include <sys/wait.h>    /* wait() */
 
 #include "log.h"
 

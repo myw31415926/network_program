@@ -14,6 +14,17 @@
 #define SERV_PORT       8000
 #define LISTENQ         16
 
+/* 处理SIGCHLD信号 */
+void sig_chld(int signo)
+{
+    pid_t pid;
+    int   stat;
+
+    while ((pid = waitpid(-1, &stat, WNOHANG)) > 0)
+        log_debug("child %d terminated\n", pid);
+    return;
+}
+
 /* 接收消息，并回射给客户端 */
 void echo_srv(int sockfd, struct sockaddr_in *cliaddr)
 {
@@ -29,10 +40,13 @@ void echo_srv(int sockfd, struct sockaddr_in *cliaddr)
             log_debug("recv client[%s:%d]: %s", ip, ntohs(cliaddr->sin_port), buf);
 
             write_n(sockfd, buf, n);
-        } else if (n < 0 && errno == EINTR) {
+        } else if (n < 0) {
             if (errno == EINTR) continue;   /* 忽略中断错误 */
 
             log_err_quit("str_echo: read error!");
+        } else {
+            log_debug("str_echo recv none, exit!");
+            break;
         }
     }
 }
@@ -56,6 +70,8 @@ int main(int argc, char *argv[])
 
     ret = listen(listenfd, LISTENQ);
     CHECK_EQ_RETURN(ret, 0, "listen socket failed!");
+
+    signal(SIGCHLD, sig_chld);      /* 注册SIGCHLD信号，避免子进程僵死 */
 
     while (1) {
         clilen = sizeof(cliaddr);

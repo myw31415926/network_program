@@ -48,5 +48,5 @@ int main(int argc, char *argv[])
 
     echo_cli(stdin, sockfd);
 
-    return 0;
+    exit(0);
 }

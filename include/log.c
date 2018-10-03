@@ -94,7 +94,7 @@ static void msg_doit(int errnoflag, int level, const char *fmt, va_list ap)
     vsnprintf(buf, LOG_MAX, fmt, ap);   /* safe */
 
     n = strlen(buf);
-    if (errnoflag)
+    if (errnoflag & errno_save)
         snprintf(buf + n, LOG_MAX - n, ": %s", strerror(errno_save));
     strcat(buf, "\n");
 
