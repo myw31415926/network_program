@@ -11,6 +11,8 @@
 
 #include "utils.h"
 
+#define BINARY_LINE_MAX     16
+
 /* 从socket中读取n个字节，返回实际读取的字节数 */
 ssize_t read_n(int fd, void *buf, size_t nbytes)
 {
@@ -106,4 +108,34 @@ ssize_t read_line(int fd, void *buf, size_t maxlen)
 
     *pchar = 0;             /* null terminate */
     return n;
+}
+
+/* 产生0~1之间的随机数 */
+static inline double _inline_rand_1()
+{
+    return rand() / (RAND_MAX + 1.0);
+}
+
+/* 产生0~1之间的随机数，需要先srand()初始化随机种子 */
+double rand_1()
+{
+    return _inline_rand_1();
+}
+
+/* 产生0~n之间的随机整数，需要先srand()初始化随机种子 */
+int rand_n(int n)
+{
+    return (int)(n * _inline_rand_1());
+}
+
+/* 打印buf中的二进制数据，每行显示16个数据 */
+void print_binary_data(unsigned char *buf, size_t size)
+{
+    int i;
+
+    for (i = 0; i < size; i++) {
+        if (i % BINARY_LINE_MAX == 0) fprintf(stdout, "%-8d| ", (i / BINARY_LINE_MAX) + 1);
+        fprintf(stdout, "%02x ", buf[i]);
+        if (i % BINARY_LINE_MAX == (BINARY_LINE_MAX - 1)) fprintf(stdout, "\n");
+    }
 }

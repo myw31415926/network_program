@@ -1,9 +1,9 @@
 /**
- * desc: TCP demo程序，TCP Server使用fork处理一个TCP Client请求，回显字符串。
- * file: echo_cli.c
+ * desc: TCP demo程序，TCP Server使用fork处理一个TCP Client请求，发送TLV数据
+ * file: data_cli.c
  *
  * author:  myw31415926
- * date:    20180930
+ * date:    20181005
  * version: V0.1
  *
  * the closer you look, the less you see
@@ -24,6 +24,8 @@ void echo_cli(FILE *fp, int sockfd)
 
         fputs(recvline, stdout);
     }
+
+    srand((int)time(NULL));
 }
 
 int main(int argc, char *argv[])

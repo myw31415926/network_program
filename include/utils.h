@@ -78,4 +78,13 @@ ssize_t write_n(int fd, void *buf, size_t nbytes);
 /* 从socket中读取一行数据，返回实际读取的字节数 */
 ssize_t read_line(int fd, void *buf, size_t maxlen);
 
+/* 产生0~1之间的随机数，需要先srand()初始化随机种子 */
+double rand_1();
+
+/* 产生0~n之间的随机整数，需要先srand()初始化随机种子 */
+int rand_n(int n);
+
+/* 打印buf中的二进制数据，每行显示16个数据 */
+void print_binary_data(unsigned char *buf, size_t size);
+
 #endif /*_UTILS_V01_H */
