@@ -14,13 +14,27 @@
 /* 测试：产生0~1之间的随机数，需要先srand()初始化随机种子 */
 void test_rand_1()
 {
-    rand_1();
+    fprintf(stdout, "### test start: test_rand_1() ###\n");
+    srand(time(NULL));
+
+    for (int i = 0; i < 10; ++i) {
+        fprintf(stdout, "\t%d: %0.6f", i, rand_1());
+    }
+
+    fprintf(stdout, "### test end: test_rand_1() ###\n");
 }
 
 /* 测试：产生0~n之间的随机整数，需要先srand()初始化随机种子 */
 void test_rand_n(int n)
 {
-    rand_n(100);
+    fprintf(stdout, "### test start: test_rand_n() ###\n");
+    srand(time(NULL));
+
+    for (int i = 0; i < 10; ++i) {
+        fprintf(stdout, "\t%d: %d", i, rand_n(1000));
+    }
+
+    fprintf(stdout, "### test end: test_rand_n() ###\n");
 }
 
 /* 测试：打印buf中的二进制数据，每行显示16个数据 */
