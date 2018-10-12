@@ -68,6 +68,16 @@
         return ret;                                 \
     }
 
+/* 函数的起始和结束标记，需要配对使用 */
+#define LABEL_FUNC_START            \
+    struct timeval tv;              \
+    gettimeofday(&tv, NULL);        \
+    fprintf(stdout, "### [%ld.%ld] test start: %s\n", tv.tv_sec, tv.tv_usec, __func__);
+
+#define LABEL_FUNC_END              \
+    gettimeofday(&tv, NULL);        \
+    fprintf(stdout, "### [%ld.%ld] test end: %s\n\n", tv.tv_sec, tv.tv_usec, __func__);
+
 
 /* 从socket中读取n个字节，返回实际读取的字节数 */
 ssize_t read_n(int fd, void *buf, size_t nbytes);

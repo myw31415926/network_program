@@ -138,4 +138,5 @@ void print_binary_data(unsigned char *buf, size_t size)
         fprintf(stdout, "%02x ", buf[i]);
         if (i % BINARY_LINE_MAX == (BINARY_LINE_MAX - 1)) fprintf(stdout, "\n");
     }
+    fprintf(stdout, "\n");
 }
