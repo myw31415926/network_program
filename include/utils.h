@@ -80,6 +80,12 @@
     fprintf(stdout, "### [%ld.%ld] test end: %s\n\n", tv.tv_sec, tv.tv_usec, __func__);
 
 
+/* 64位网络字节序转主机字节序 */
+#define ntoh64  be64toh
+/* 64位主机字节序转网络字节序 */
+#define hton64  htobe64
+
+
 /* 从socket中读取n个字节，返回实际读取的字节数 */
 ssize_t read_n(int fd, void *buf, size_t nbytes);
 

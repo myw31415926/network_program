@@ -41,8 +41,8 @@ void data_srv(int sockfd, struct sockaddr_in *cliaddr)
             log_debug("recv client[%s:%d], recv data:\n", ip, ntohs(cliaddr->sin_port));
             print_binary_data((unsigned char*)(&args), sizeof(args));
 
-            fprintf(stdout, "client data: %ld, %ld\n", be64toh(args.arg1), be64toh(args.arg2));
-            result.sum = htobe64(be64toh(args.arg1) + be64toh(args.arg2));
+            fprintf(stdout, "client data: %ld, %ld\n", ntoh64(args.arg1), ntoh64(args.arg2));
+            result.sum = hton64(ntoh64(args.arg1) + ntoh64(args.arg2));
             write_n(sockfd, &result, sizeof(result));
         } else if (n < 0) {
             if (errno == EINTR) continue;   /* 忽略中断错误 */

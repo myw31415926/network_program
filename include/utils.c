@@ -110,6 +110,32 @@ ssize_t read_line(int fd, void *buf, size_t maxlen)
     return n;
 }
 
+/*
+uint64_t ntoh64(const uint64_t val)
+{
+    uint64_t rval;
+    uint8_t *data = (uint8_t *)&rval;
+
+    data[0] = val >> 56;
+    data[1] = val >> 48;
+    data[2] = val >> 40;
+    data[3] = val >> 32;
+    data[4] = val >> 24;
+    data[5] = val >> 16;
+    data[6] = val >> 8;
+    data[7] = val >> 0;
+
+    return rval;
+}
+*/
+
+/*
+uint64_t hton64(const uint64_t val)
+{
+    return (ntoh64(val));
+}
+*/
+
 /* 产生0~1之间的随机数 */
 static inline double _inline_rand_1()
 {

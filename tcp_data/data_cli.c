@@ -26,14 +26,14 @@ void data_cli(FILE *fp, int sockfd)
             continue;
         }
 
-        args.arg1 = htobe64(args.arg1);
-        args.arg2 = htobe64(args.arg2);
+        args.arg1 = hton64(args.arg1);
+        args.arg2 = hton64(args.arg2);
         write_n(sockfd, &args, sizeof(args));
 
         /* 接收Server端的计算结果 */
         n = read_n(sockfd, &result, sizeof(result));
         if (n > 0) {
-            fprintf(stdout, "%ld\n", be64toh(result.sum));
+            fprintf(stdout, "%ld\n", ntoh64(result.sum));
         } else if (n < 0) {
             if (errno == EINTR) continue;   /* 忽略中断错误 */
             log_err_quit("data_cli: read error!");
