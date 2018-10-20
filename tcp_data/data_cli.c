@@ -1,31 +1,46 @@
 /**
- * desc: TCP demo程序，TCP Server使用fork处理一个TCP Client请求，发送TLV数据
- * file: data_cli.c
+ * desc: TCP demo程序，Client端发送数据，并接收Server端的计算结果
+ * file: data_srv.c
  *
  * author:  myw31415926
- * date:    20181005
+ * date:    20181014
  * version: V0.1
  *
  * the closer you look, the less you see
  */
 
 #include "utils.h"
+#include "data_def.h"
 
-/* 从stdin读一行文本，发送到服务器，并从服务器回射 */
-void echo_cli(FILE *fp, int sockfd)
+/* 随机生成一个运算符，并构造操作数，发送Server端，等待结果 */
+void data_cli(FILE *fp, int sockfd)
 {
-    char sendline[MAXLINE], recvline[MAXLINE];
+    ssize_t   n;
+    argdata_s args;
+    result_s  result;
+    char      buf[MAXLINE];
 
-    while (fgets(sendline, MAXLINE, fp) != NULL) {
-        write_n(sockfd, sendline, strlen(sendline));
+    while (NULL != fgets(buf, MAXLINE, fp)) {
+        if (2 != sscanf(buf, "%ld %ld", &args.arg1, &args.arg2)) {
+            log_err("invalid input: %s", buf);
+            continue;
+        }
 
-        if (0 == read_line(sockfd, recvline, MAXLINE))
+        args.arg1 = htobe64(args.arg1);
+        args.arg2 = htobe64(args.arg2);
+        write_n(sockfd, &args, sizeof(args));
+
+        /* 接收Server端的计算结果 */
+        n = read_n(sockfd, &result, sizeof(result));
+        if (n > 0) {
+            fprintf(stdout, "%ld\n", be64toh(result.sum));
+        } else if (n < 0) {
+            if (errno == EINTR) continue;   /* 忽略中断错误 */
+            log_err_quit("data_cli: read error!");
+        } else {
             log_err_quit("echo_cli: server terminated prematurely");
-
-        fputs(recvline, stdout);
+        }
     }
-
-    srand((int)time(NULL));
 }
 
 int main(int argc, char *argv[])
@@ -48,7 +63,7 @@ int main(int argc, char *argv[])
     ret = connect(sockfd, (struct sockaddr*)&srvaddr, sizeof(srvaddr));
     CHECK_EQ_RETURN(ret, 0, "connect socket failed!");
 
-    echo_cli(stdin, sockfd);
+    data_cli(stdin, sockfd);
 
     exit(0);
 }

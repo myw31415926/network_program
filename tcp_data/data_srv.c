@@ -1,15 +1,16 @@
 /**
- * desc: TCP demo程序，TCP Server使用fork处理一个TCP Client请求，统计客户端数据
+ * desc: TCP demo程序，TCP Server使用fork处理一个TCP Client请求，计算Client端数据
  * file: data_srv.c
  *
  * author:  myw31415926
- * date:    20181005
+ * date:    20181014
  * version: V0.1
  *
  * the closer you look, the less you see
  */
 
 #include "utils.h"
+#include "data_def.h"
 
 #define SERV_PORT       8000
 #define LISTENQ         16
@@ -26,26 +27,28 @@ void sig_chld(int signo)
 }
 
 /* 接收消息，并回射给客户端 */
-void echo_srv(int sockfd, struct sockaddr_in *cliaddr)
+void data_srv(int sockfd, struct sockaddr_in *cliaddr)
 {
-    ssize_t n;
-    char    ip[INET_ADDRSTRLEN];
-    char    buf[MAXLINE];
+    ssize_t   n;
+    argdata_s args;
+    result_s  result;
+    char      ip[INET_ADDRSTRLEN];
 
     while (1) {
-        n = read(sockfd, buf, MAXLINE);
+        n = read_n(sockfd, &args, sizeof(args));
         if (n > 0) {
-            buf[n] = 0;
             inet_ntop(AF_INET, &(cliaddr->sin_addr), ip, INET_ADDRSTRLEN);
-            log_debug("recv client[%s:%d]: %s", ip, ntohs(cliaddr->sin_port), buf);
+            log_debug("recv client[%s:%d], recv data:\n", ip, ntohs(cliaddr->sin_port));
+            print_binary_data((unsigned char*)(&args), sizeof(args));
 
-            write_n(sockfd, buf, n);
+            fprintf(stdout, "client data: %ld, %ld\n", be64toh(args.arg1), be64toh(args.arg2));
+            result.sum = htobe64(be64toh(args.arg1) + be64toh(args.arg2));
+            write_n(sockfd, &result, sizeof(result));
         } else if (n < 0) {
             if (errno == EINTR) continue;   /* 忽略中断错误 */
-
-            log_err_quit("str_echo: read error!");
+            log_err_quit("data_srv: read error!");
         } else {
-            log_debug("str_echo recv none, exit!");
+            log_debug("data_srv recv none, exit!");
             break;
         }
     }
@@ -80,7 +83,7 @@ int main(int argc, char *argv[])
 
         if (0 == (child_pid = fork())) {    /* child process */
             close(listenfd);    /* close listening socket */
-            echo_srv(connfd, &cliaddr);   /* process the request */
+            data_srv(connfd, &cliaddr);   /* process the request */
             exit(0);
         }
         close(connfd);          /* parent close connected socket */

@@ -8,11 +8,11 @@ UTIL_SRC = \
 	../include/utils.c \
 	../include/log.c
 
-SRV_TARTET = echo_srv
-SRV_SRC = echo_srv.c $(UTIL_SRC)
+SRV_TARTET = data_srv
+SRV_SRC = data_srv.c $(UTIL_SRC)
 
-CLI_TARTET = echo_cli
-CLI_SRC = echo_cli.c $(UTIL_SRC)
+CLI_TARTET = data_cli
+CLI_SRC = data_cli.c $(UTIL_SRC)
 
 TARGET = \
 	$(SRV_TARTET) \

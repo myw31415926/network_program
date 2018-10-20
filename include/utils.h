@@ -26,6 +26,7 @@
 #include <netinet/in.h>  /* sockaddr_in{} and other Internet defns */
 #include <arpa/inet.h>   /* inet(3) functions */
 #include <sys/wait.h>    /* wait() */
+#include <stdint.h>      /* int8/16/32/64_t, uint8/16/32/64_t, htobe64, be64toh */
 
 #include "log.h"
 

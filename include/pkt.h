@@ -59,9 +59,41 @@ static inline int pkthdr_valid_sync(pkt_hdr *ph)
     return pkthdr_get_sync(ph) == PKT_SYNC_FLAG;
 }
 
-static inline unsigned short pkthdr_get_flen(pkt_hdr *ph)
+static inline unsigned char pkthdr_get_type(pkt_hdr *ph)
 {
-    return (ph->filling & 0x03);
+    return ph->type;
+}
+
+static inline void pkthdr_set_type(pkt_hdr *ph, unsigned char type)
+{
+    ph->type = type;
+}
+
+static inline unsigned char pkthdr_get_subtype(pkt_hdr *ph)
+{
+    return ph->subtype;
+}
+
+static inline void pkthdr_set_subtype(pkt_hdr *ph, unsigned char stype)
+{
+    ph->subtype = stype;
+}
+
+static inline unsigned short pkthdr_get_len(pkt_hdr *ph)
+{
+    return (ph->len << 2) - (ph->filling & 0x03);
+}
+
+static inline void pkthdr_get_len(pkt_hdr *ph, unsigned short len)
+{
+    ph->len = (len + 3) >> 2;
+    ph->filling = len & 0x03;
+}
+
+/* get data pointer */
+static inline unsigned char* pkthdr_get_data(pkt_hdr *ph)
+{
+    return (unsigned char *)(ph + 1);
 }
 
 #ifdef __cplusplus

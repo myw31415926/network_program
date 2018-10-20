@@ -4,8 +4,12 @@
 
 * *include*   
 公共头文件。
+
 * *tcp_echo*   
 TCP demo程序，TCP Server使用fork处理一个TCP Client请求，回显字符串。
+
+* *tcp_data*   
+TCP demo程序，TCP Server使用fork处理一个TCP Client请求，计算两个数的和。
 
 cnetos 安装ifconfig
 ```bash

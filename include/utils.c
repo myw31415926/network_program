@@ -135,6 +135,7 @@ void print_binary_data(unsigned char *buf, size_t size)
 
     for (i = 0; i < size; i++) {
         if (i % BINARY_LINE_MAX == 0) fprintf(stdout, "%-8d| ", (i / BINARY_LINE_MAX) + 1);
+        if (i % BINARY_LINE_MAX == (BINARY_LINE_MAX >> 1)) fprintf(stdout, "   ");
         fprintf(stdout, "%02x ", buf[i]);
         if (i % BINARY_LINE_MAX == (BINARY_LINE_MAX - 1)) fprintf(stdout, "\n");
     }
