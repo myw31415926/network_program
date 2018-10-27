@@ -18,15 +18,17 @@
 #include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <unistd.h>      /* read() write() fork() */
-#include <time.h>        /* timespec for pselect() */
-#include <sys/types.h>   /* basic system data types */
-#include <sys/socket.h>  /* basic socket definitions */
-#include <sys/time.h>    /* timeval for select() */
-#include <netinet/in.h>  /* sockaddr_in{} and other Internet defns */
-#include <arpa/inet.h>   /* inet(3) functions */
-#include <sys/wait.h>    /* wait() */
-#include <stdint.h>      /* int8/16/32/64_t, uint8/16/32/64_t, htobe64, be64toh */
+#include <unistd.h>         /* read() write() fork() */
+#include <time.h>           /* timespec for pselect() */
+#include <sys/types.h>      /* basic system data types */
+#include <sys/socket.h>     /* basic socket definitions */
+#include <sys/select.h>     /* select() */
+#include <sys/time.h>       /* timeval for select() */
+#include <netinet/in.h>     /* sockaddr_in{} and other Internet defns */
+#include <arpa/inet.h>      /* inet(3) functions */
+#include <sys/wait.h>       /* wait() */
+#include <poll.h>           /* poll() */
+#include <stdint.h>         /* int8/16/32/64_t, uint8/16/32/64_t, htobe64, be64toh */
 
 #include "log.h"
 
@@ -56,7 +58,7 @@
 #define max(a, b)    ((a) > (b) ? (a) : (b))
 
 /* 检测返回值，不等于则返回错误 */
-#define CHECK_EQ_RETURN(ret, val, format, args...)  \
+#define CHECK_NE_RETURN(ret, val, format, args...)  \
     if (ret != val) {                               \
         log_err(format, ##args);                    \
         return ret;                                 \

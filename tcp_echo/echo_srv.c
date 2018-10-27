@@ -14,7 +14,7 @@
 #define SERV_PORT       8000
 #define LISTENQ         16
 
-/* 处理SIGCHLD信号 */
+/* 处理子进程上报的SIGCHLD信号 */
 void sig_chld(int signo)
 {
     pid_t pid;
@@ -53,9 +53,9 @@ void echo_srv(int sockfd, struct sockaddr_in *cliaddr)
 
 int main(int argc, char *argv[])
 {
-    int ret, listenfd, connfd;
+    int   ret, listenfd, connfd;
     pid_t child_pid;
-    socklen_t clilen;
+    socklen_t          clilen;
     struct sockaddr_in cliaddr, srvaddr;
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
     srvaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     srvaddr.sin_port        = htons(SERV_PORT);
     ret = bind(listenfd, (struct sockaddr*)&srvaddr, sizeof(srvaddr));
-    CHECK_EQ_RETURN(ret, 0, "bind socket failed!");
+    CHECK_NE_RETURN(ret, 0, "bind socket failed!");
 
     ret = listen(listenfd, LISTENQ);
-    CHECK_EQ_RETURN(ret, 0, "listen socket failed!");
+    CHECK_NE_RETURN(ret, 0, "listen socket failed!");
 
     signal(SIGCHLD, sig_chld);      /* 注册SIGCHLD信号，避免子进程僵死 */
 

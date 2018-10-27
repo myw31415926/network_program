@@ -69,10 +69,10 @@ int main(int argc, char *argv[])
     srvaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     srvaddr.sin_port        = htons(SERV_PORT);
     ret = bind(listenfd, (struct sockaddr*)&srvaddr, sizeof(srvaddr));
-    CHECK_EQ_RETURN(ret, 0, "bind socket failed!");
+    CHECK_NE_RETURN(ret, 0, "bind socket failed!");
 
     ret = listen(listenfd, LISTENQ);
-    CHECK_EQ_RETURN(ret, 0, "listen socket failed!");
+    CHECK_NE_RETURN(ret, 0, "listen socket failed!");
 
     signal(SIGCHLD, sig_chld);      /* 注册SIGCHLD信号，避免子进程僵死 */
 

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     inet_pton(AF_INET, argv[1], &srvaddr.sin_addr);
 
     ret = connect(sockfd, (struct sockaddr*)&srvaddr, sizeof(srvaddr));
-    CHECK_EQ_RETURN(ret, 0, "connect socket failed!");
+    CHECK_NE_RETURN(ret, 0, "connect socket failed!");
 
     echo_cli(stdin, sockfd);
 
