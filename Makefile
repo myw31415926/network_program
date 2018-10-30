@@ -4,6 +4,7 @@ DIRS = \
 	include  \
 	tcp_echo \
 	tcp_data \
+	select_echo \
 
 all:
 	for i in $(DIRS); do \
