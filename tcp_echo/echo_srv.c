@@ -45,7 +45,7 @@ void echo_srv(int sockfd, struct sockaddr_in *cliaddr)
 
             log_err_quit("str_echo: read error!");
         } else {
-            log_debug("str_echo recv none, exit!");
+            log_debug("str_echo read none, exit!");
             break;
         }
     }

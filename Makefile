@@ -5,6 +5,7 @@ DIRS = \
 	tcp_echo \
 	tcp_data \
 	select_echo \
+	poll_echo \
 
 all:
 	for i in $(DIRS); do \

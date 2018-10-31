@@ -48,7 +48,7 @@ void data_srv(int sockfd, struct sockaddr_in *cliaddr)
             if (errno == EINTR) continue;   /* 忽略中断错误 */
             log_err_quit("data_srv: read error!");
         } else {
-            log_debug("data_srv recv none, exit!");
+            log_debug("data_srv read none, exit!");
             break;
         }
     }
